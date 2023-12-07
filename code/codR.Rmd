@@ -178,3 +178,8 @@ ggplot(pyr_EMS, aes(x=classe_age))+
         scale_y_continuous(breaks = seq(-60,60,10), labels = abs(seq(-60,60,10))) +
         coord_flip()
 ```
+
+
+```{r}
+
+```

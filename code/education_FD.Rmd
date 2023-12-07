@@ -1,0 +1,109 @@
+---
+title: "Untitled"
+author: "Renaud Hass"
+date: "2023-12-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(tidyverse)
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(tibble)
+library(readxl)
+library(data.table)
+```
+
+
+lien des bases : https://www.insee.fr/fr/statistiques/6544333?sommaire=6456104 (csv)
+
+```{r}
+#Import des bases
+# Creation d'une variable chemin
+
+USER <- Sys.getenv("USERNAME")
+
+if (USER == "reno"){ 
+  CHEMIN = "C:/démo S3/analyse de territoire/DATA/"
+}
+
+if (USER == "LOCAL"){ 
+  CHEMIN_CAF = 'C:/Users/330669/Mes Documents (local)/Observation territoriale/CAF/_depuis2013_CSV/'
+  CHEMIN_INSEE = 'C:/Users/330669/Mes Documents (local)/Observation territoriale/INSEE/'
+  CHEMIN_GEOLOC = 'C:/Users/330669/Mes Documents (local)/OEP/Geolocalisation/'
+}
+
+#import des bases
+
+FD_iris <- read.csv2(paste0(CHEMIN, "FD_INDCVIZC_2019.csv" ), nrows = 100000)
+
+correspondance_iris_ems <-  read_excel(paste0(CHEMIN,"table_correspondance_IRIS_EMS.xlsx") , sheet = "EMS") # table de correspondance du leyen
+correspondance_iris_ems[is.na(correspondance_iris_ems)] <- "0"  #supression des NA pour faire des filtres plus tard
+```
+
+
+```{r}
+#jointure
+table(FD_iris$IRIS)
+
+FD_ems <- inner_join(FD_iris , correspondance_iris_ems, join_by(IRIS == ID_IRIS))
+
+
+
+```
+indicateur = Jeune sortant précoce du système soclaire
+
+pas de diplome + pas scolarisé + 18 à 24 ans
+```{r}
+# pour ems
+
+FD_ems_1824 <- FD_ems %>% filter(AGED >= 18,
+                                 AGED <= 24)
+
+FD_ems_1824 <- FD_ems_1824 %>% mutate(DIPL = recode(DIPL,
+                                                              "01" = "Pas de diplôme",
+                                                             "02" = "Pas de diplôme",
+                                                             "03" = "Pas de diplôme",
+                                                             "11" = "Pas de diplôme",
+                                                             "12" = "Pas de diplôme")) %>% 
+                              filter(DIPL == "Pas de dipôme")
+
+FD_ems_1824$SortantPrecoce <- ifelse(DIPL == "Pas de diplôme" &
+                                     ILETUD == "Z" ,  1 , 0 )
+
+FD_ems_1824 <- FD_ems_1824 %>% 
+  group_by(SortantPrecoce) %>% 
+  summarise(Nombre = sum(IPONDI_num))
+                                      
+
+
+# Pour qpv de strasbourg
+
+
+FD_qpv_1824 <- FD_qpv_1824 %>% filter(AGED >= 18,
+                                 AGED <= 24)
+
+FD_qpv_1824 <- FD_qpv_1824 %>% mutate(DIPL = recode(DIPL,
+                                                              "01" = "Pas de diplôme",
+                                                             "02" = "Pas de diplôme",
+                                                             "03" = "Pas de diplôme",
+                                                             "11" = "Pas de diplôme",
+                                                             "12" = "Pas de diplôme")) %>% 
+                              filter(DIPL == "Pas de dipôme")
+
+FD_qpv_1824$SortantPrecoce <- ifelse(DIPL == "Pas de diplôme" &
+                                     ILETUD == "Z" ,  1 , 0 )
+
+FD_qpv_1824 <- FD_qpv_1824 %>% 
+  group_by(SortantPrecoce) %>% 
+  summarise(Nombre = sum(IPONDI_num))
+                                      
+
+```
+

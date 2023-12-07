@@ -1,0 +1,123 @@
+---
+title: "education"
+author: "Renaud Hass"
+date: "2023-11-30"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(readr)
+library(tidyverse)
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(tibble)
+library(readxl)
+library(data.table)
+```
+Lien des bases :
+
+diplome 2013 (xlsx) https://www.insee.fr/fr/statistiques/2386698
+diplome 2019 (xlsx) https://www.insee.fr/fr/statistiques/6543298 
+
+
+```{r}
+#Import des bases
+# Creation d'une variable chemin
+
+USER <- Sys.getenv("USERNAME")
+
+if (USER == "reno"){ 
+  CHEMIN = "C:/démo S3/analyse de territoire/DATA/"
+}
+
+if (USER == "LOCAL"){ 
+  CHEMIN_CAF = 'C:/Users/330669/Mes Documents (local)/Observation territoriale/CAF/_depuis2013_CSV/'
+  CHEMIN_INSEE = 'C:/Users/330669/Mes Documents (local)/Observation territoriale/INSEE/'
+  CHEMIN_GEOLOC = 'C:/Users/330669/Mes Documents (local)/OEP/Geolocalisation/'
+}
+
+
+
+#import des bases
+pop_iris <- read.csv2(paste0(CHEMIN, "base-ic-evol-struct-pop-2019.csv")) # base insee
+pop_iris  <- pop_iris %>% mutate_all(as.character) %>% mutate_all(as.numeric)
+pop_iris  <- pop_iris  %>% mutate( IRIS = as.character( IRIS ), COM = as.character(COM))
+
+correspondance_iris_ems <-  read_excel(paste0(CHEMIN,"table_correspondance_IRIS_EMS.xlsx") , sheet = "EMS") # table de correspondance du leyen
+correspondance_iris_ems[is.na(correspondance_iris_ems)] <- "0"  #supression des NA pour faire des filtres plus tard
+# correspondance_iris_ems  <- correspondance_iris_ems  %>% mutate( ID_IRIS = as.numeric( ID_IRIS)) 
+
+
+
+diplome_iris <- read.csv2(paste0(CHEMIN, "base-ic-diplomes-formation-2019.csv"))
+diplome_iris  <- diplome_iris %>% mutate_all(as.character) %>% mutate_all(as.numeric)
+diplome_iris  <- diplome_iris  %>% mutate( IRIS = as.character( IRIS ), COM = as.character(COM))
+diplome_iris <- as.tibble(diplome_iris)
+
+diplome_iris13 <- read_xls(paste0(CHEMIN, "base-ic-diplomes-formation-2013.xls") , skip = 5)
+# diplome_iris13  <- diplome_iris13 %>% mutate_all(as.character) %>% mutate_all(as.numeric)
+# diplome_iris13  <- diplome_iris13  %>% mutate( IRIS = as.character( IRIS ), COM = as.character(COM))
+dipllome_iris13 <- as.tibble(diplome_iris13)
+
+# FD <- read.csv2(paste0(CHEMIN,"FD_INDREGZC_2019.csv"))
+```
+
+# Premier indicateur = taux de scolarité des djeunes a l'echelle des qpv
+
+taux de scolarité des jeunes = nombre de jeunes scolarisé / nombre total de jeune
+ckoi un jeuuuuune
+```{r}
+# trie des données + création indicateur taux pour 2019
+diplome_ems19 <- inner_join(diplome_iris , correspondance_iris_ems , join_by(IRIS  == ID_IRIS))
+
+diplome_ems19$taux_scolarisation19_1824 <-  (diplome_ems19$P19_SCOL1824/diplome_ems19$P19_POP1824) * 100
+
+diplome_qpv_ems19 <- diplome_ems19 %>% filter(ID_QPV != "0")
+
+# trie des données + création indicateur taux pour 2013
+diplome_ems13 <- inner_join(diplome_iris13 , correspondance_iris_ems , join_by(IRIS  == ID_IRIS))
+
+diplome_ems13$taux_scolarisation13_1824 <-  (diplome_ems13$P13_SCOL1824/diplome_ems13$P13_POP1824) * 100
+
+diplome_qpv_ems13 <- diplome_ems13 %>% filter(ID_QPV != "0")
+
+
+
+
+#Tableau qpv 
+
+tableau_tauxscol_qpv13 <- diplome_qpv_ems13 %>% 
+                        select (LIB_QPV ,
+                                LIB_IRIS_EMS, 
+                                P13_SCOL1824 ,
+                                taux_scolarisation13_1824)
+
+tableau_tauxscol_qpv19 <- diplome_qpv_ems19 %>% 
+                        select (LIB_QPV , 
+                                LIB_IRIS_EMS,
+                                P19_SCOL1824,
+                                taux_scolarisation19_1824)
+
+tableau_tauxscol_qpv <- inner_join(tableau_tauxscol_qpv19 , tableau_tauxscol_qpv13 , join_by( LIB_IRIS_EMS == LIB_IRIS_EMS))
+
+tableau_tauxscol_qpv$variation_total_relative <- 0
+tableau_tauxscol_qpv$variation_total_relative <- (tableau_tauxscol_qpv$P19_SCOL1824 - tableau_tauxscol_qpv$P13_SCOL1824) / tableau_tauxscol_qpv$P13_SCOL1824 * 100
+
+tableau_tauxscol_qpv$variation_annuelle_moyenne = ((tableau_tauxscol_qpv$P19_SCOL1824 / tableau_tauxscol_qpv$P13_SCOL1824)^(1/5) - 1 )*100
+
+#Mise en forme
+
+
+
+tableau_tauxscol_qpv$Nom <- ifelse( tableau_tauxscol_qpv$LIB_QPV.y == tableau_tauxscol_qpv$LIB_IRIS_EMS,  tableau_tauxscol_qpv$LIB_QPV.x , paste(tableau_tauxscol_qpv$LIB_QPV.x , tableau_tauxscol_qpv$LIB_IRIS_EMS , sep = " : "))
+
+tableau_tauxscol_qpv <- tableau_tauxscol_qpv[,c(10,3,7,4,8,9)]
+
+#calcul du taux de scolarisation sur strass en moyenne et qpv en moyenne
+```
+
