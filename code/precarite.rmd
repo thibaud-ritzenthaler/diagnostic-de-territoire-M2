@@ -1,0 +1,52 @@
+---
+title: "Precarité"
+output: html_notebook
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libs, include=FALSE}
+library(readr)
+library(tidyverse)
+library(dplyr)
+library(readxl)
+library(ggplot2)
+library(tibble)
+library(readxl)
+library(data.table)
+library(xlsx)
+```
+
+```{r import_data}
+
+if (Sys.getenv("USERNAME") == "tibo"){
+  path <- "C:/Users/tibo/Documents/demographie/diagnostic-de-territoire-M2"
+}
+
+setwd(path);
+correspondance <- read_xlsx("data/table_correspondance_IRIS_EMS.xlsx", sheet = "EMS")
+
+prec_iris_var <- read_xlsx("data/filosofi/BASE_TD_FILO_DEC_IRIS_2020.xlsx", sheet = "Variables", range = "A6:C34")
+prec_iris_20 <- read_xlsx("data/filosofi/BASE_TD_FILO_DEC_IRIS_2020.xlsx", sheet = "IRIS_DEC", range = "A6:AB16031") %>% filter(COM %in% correspondance$ID_COM)
+prec_iris_19 <- read_xlsx("data/filosofi/BASE_TD_FILO_DEC_IRIS_2019.xlsx", sheet = "IRIS_DEC", range = "A6:AB16031") %>% filter(COM %in% correspondance$ID_COM)
+prec_iris_18 <- read_xlsx("data/filosofi/BASE_TD_FILO_DEC_IRIS_2018.xlsx", sheet = "IRIS_DEC", range = "A6:AB16031") %>% filter(COM %in% correspondance$ID_COM)
+prec_iris_17 <- read_xlsx("data/filosofi/BASE_TD_FILO_DEC_IRIS_2017.xlsx", sheet = "IRIS_DEC", range = "A6:AB16031") %>% filter(COM %in% correspondance$ID_COM)
+prec_iris_16 <- read_xls("data/filosofi/BASE_TD_FILO_DEC_IRIS_2016.xls", sheet = "IRIS_DEC", range = "A6:AB16031") %>% filter(COM %in% correspondance$ID_COM)
+prec_iris_15 <- read_xls("data/filosofi/BASE_TD_FILO_DEC_IRIS_2015.xls", sheet = "IRIS_DEC", range = "A6:AB16031") %>% filter(COM %in% correspondance$ID_COM)
+prec_iris_14 <- read_xls("data/filosofi/BASE_TD_FILO_DEC_IRIS_2014.xls", sheet = "IRIS_DEC", range = "A6:AA16031") %>% filter(COM %in% correspondance$ID_COM)
+prec_iris_13 <- read_xls("data/filosofi/BASE_TD_FILO_DEC_IRIS_2013.xls", sheet = "IRIS_DEC", range = "A6:Z16031") %>% filter(COM %in% correspondance$ID_COM)
+prec_iris <- prec_iris_20 %>% left_join(select(prec_iris_19, -LIBIRIS, -COM, -LIBCOM), by= c("IRIS" = "IRIS")) %>% left_join(select(prec_iris_18, -LIBIRIS, -COM, -LIBCOM), by= c("IRIS" = "IRIS")) %>% left_join(select(prec_iris_17, -LIBIRIS, -COM, -LIBCOM), by= c("IRIS" = "IRIS")) %>% left_join(select(prec_iris_16, -LIBIRIS, -COM, -LIBCOM), by= c("IRIS" = "IRIS")) %>% left_join(select(prec_iris_15, -LIBIRIS, -COM, -LIBCOM), by= c("IRIS" = "IRIS")) %>% left_join(select(prec_iris_14, -LIBIRIS, -COM, -LIBCOM), by= c("IRIS" = "IRIS"))%>% left_join(select(prec_iris_13, -LIBIRIS, -COM, -LIBCOM), by= c("IRIS" = "IRIS"))
+
+prop_impot <- prec_iris %>% select(IRIS, LIBIRIS, COM, LIBCOM, starts_with("DEC_PIMP"))
+prop_impot_part <- filter(prop_impot, !is.na(DEC_PIMP19))
+prop_impot_part_QPV <- prop_impot_part %>% filter(IRIS %in% filter(correspondance, !is.na(ID_QPV))$ID_IRIS)
+```
+
+```{r impots}
+corr <- select(correspondance,ID_IRIS, LIB_IRIS_EMS, ID_QPV, LIB_QPV)
+prop_impot_part_QPV <- left_join(prop_impot_part_QPV, corr, by=c("IRIS"="ID_IRIS"))
+
+write.xlsx(prop_impot_part_QPV, 'data/propotion_dimposes_par_qpv.xlsx')
+```

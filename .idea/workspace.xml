@@ -5,10 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2cac8167-15e7-438e-9bd0-58c92c7f1ae9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/code/QPVScol.R" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/rMarkdownGraphicsSettings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/code/precarite.rmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code/codR.Rmd" beforeDir="false" afterPath="$PROJECT_DIR$/code/codR.Rmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/render/Dossier introduction diagnostic.docx" beforeDir="false" afterPath="$PROJECT_DIR$/render/Dossier introduction diagnostic.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/render/EurometropoleQPV.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/render/EurometropoleQPV.pptx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -19,6 +20,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="R Script" />
+        <option value="RMarkdown.notebook" />
       </list>
     </option>
   </component>
@@ -36,15 +38,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "main",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "C:/Users/Tibo/Documents/Demographie/M2S1/UE5 - Diagnostic du territoire/data/qpv_sortant_precoce.csv"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/tibo/Documents/demographie/diagnostic-de-territoire-M2&quot;
   }
-}]]></component>
+}</component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-5de4e687c57e-c6172f9078bd-com.jetbrains.pycharm.ds.sharedIndexes.bundled-DS-233.13135.105" />
+      </set>
+    </attachedChunks>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="the-r-line">
+          <url>file://$PROJECT_DIR$/code/precarite.rmd</url>
+          <line>30</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
 </project>
