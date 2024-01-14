@@ -5,11 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2cac8167-15e7-438e-9bd0-58c92c7f1ae9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/rMarkdownGraphicsSettings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/code/precarite.rmd" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/render/EurometropoleQPV.pptx" beforeDir="false" afterPath="$PROJECT_DIR$/render/EurometropoleQPV.pptx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/code/precarite.rmd" beforeDir="false" afterPath="$PROJECT_DIR$/code/precarite.rmd" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/propotion_dimposes_par_qpv.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/data/propotion_dimposes_par_qpv.xlsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

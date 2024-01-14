@@ -47,6 +47,9 @@ prop_impot_part_QPV <- prop_impot_part %>% filter(IRIS %in% filter(correspondanc
 ```{r impots}
 corr <- select(correspondance,ID_IRIS, LIB_IRIS_EMS, ID_QPV, LIB_QPV)
 prop_impot_part_QPV <- left_join(prop_impot_part_QPV, corr, by=c("IRIS"="ID_IRIS"))
+prop_impot_part_QPV[prop_impot_part_QPV == "ns"] <- NA
+prop_impot_part_QPV_14_20 <- select(prop_impot_part_QPV, LIBIRIS, LIB_IRIS_EMS, LIB_QPV, ID_QPV, LIBCOM, DEC_PIMP20, DEC_PIMP14) %>% filter(!is.na(DEC_PIMP14) & !is.na(DEC_PIMP20))
 
-write.xlsx(prop_impot_part_QPV, 'data/propotion_dimposes_par_qpv.xlsx')
+#write.xlsx(prop_impot_part_QPV, 'data/propotion_dimposes_par_qpv.xlsx')
+write.xlsx(prop_impot_part_QPV_14_20, 'data/propotion_dimposes_par_qpv_14_20.xlsx')
 ```
